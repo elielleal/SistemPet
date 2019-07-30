@@ -1,0 +1,37 @@
+package br.com.pet.test;
+
+import java.sql.SQLException;
+
+import org.junit.Test;
+
+
+import br.com.pet.DAO.ProdutoDAO;
+import br.com.pet.domain.Fornecedores;
+import br.com.pet.domain.Produtos;
+
+public class ProdutoDAOTest {
+	@Test
+	public void salvar() throws SQLException {
+		Produtos p1 = new Produtos();
+		p1.setDescricao("Strodal");
+		p1.setQuantidade(10);
+		p1.setPreco(50.00);
+
+		Fornecedores f = new Fornecedores();
+		f.setCodigo(3);
+		p1.setFornecedores(f);
+		
+		Produtos p2 = new Produtos();
+		p2.setDescricao("Strodalsa");
+		p2.setQuantidade(10);
+		p2.setPreco(55.00);
+
+		Fornecedores f1 = new Fornecedores();
+		f.setCodigo(3);
+		p2.setFornecedores(f1);
+
+		ProdutoDAO fdao = new ProdutoDAO();
+
+		fdao.save(p1);
+	}
+}

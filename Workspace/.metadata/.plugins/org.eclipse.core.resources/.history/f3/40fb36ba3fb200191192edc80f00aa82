@@ -1,0 +1,52 @@
+package br.com.pet.test;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import org.junit.Ignore;
+import org.junit.Test;
+
+
+import br.com.pet.DAO.ProdutoDAO;
+import br.com.pet.domain.Fornecedores;
+import br.com.pet.domain.Produtos;
+
+public class ProdutoDAOTest {
+	@Test
+	@Ignore
+	public void salvar() throws SQLException {
+		Produtos p1 = new Produtos();
+		p1.setDescricao("Strodallfgd");
+		p1.setQuantidade(10);
+		p1.setPreco(50.00);
+
+		Fornecedores f = new Fornecedores();
+		f.setCodigo(3);
+		p1.setFornecedores(f);
+		
+		
+
+		ProdutoDAO fdao = new ProdutoDAO();
+
+		fdao.save(p1);
+	}
+	@Test
+
+	public void listar()throws SQLException{
+	
+		ProdutoDAO fdao = new ProdutoDAO();
+		ArrayList<Produtos> lista = fdao.listar();
+		
+		for (Produtos p : lista){
+			System.out.println("Código do Produto: " + p.getCodigo());
+			System.out.println("Descrição do Produto: " + p.getDescricao());
+			System.out.println("Valor do Produto: " + p.getPreco());
+			System.out.println("Quantidade: " + p.getQuantidade());
+			System.out.println("Código do Fornecedor: " + p.getFornecedores().getCodigo());
+			System.out.println("Descrição do Fornecedor: " + p.getFornecedores().getDescricao());
+			System.out.println("");
+		}
+		
+	}
+	
+}

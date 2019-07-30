@@ -1,0 +1,37 @@
+package br.com.pet.bean;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.model.ListDataModel;
+
+import br.com.pet.DAO.FornecedoresDAO;
+import br.com.pet.domain.Fornecedores;
+
+@ManagedBean(name = "MBFornecedores")
+@ViewScoped
+public class FornecedoresBean {
+	private ListDataModel<Fornecedores> itens;
+
+	public ListDataModel<Fornecedores> getItens() {
+		return itens;
+	}
+
+	public void setItens(ListDataModel<Fornecedores> itens) {
+		this.itens = itens;
+	}
+	
+	public void prepararPesquisa(){
+		try {
+			FornecedoresDAO fdao = new FornecedoresDAO();
+			
+			ArrayList<Fornecedores>lista = fdao.Listar();
+			itens = new ListDataModel<Fornecedores>(lista);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+}

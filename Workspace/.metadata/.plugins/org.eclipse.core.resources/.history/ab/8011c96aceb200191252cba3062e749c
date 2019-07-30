@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+xmlns:ui="http://java.sun.com/jsf/facelets"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:p="http://primefaces.org/ui"
+template="/templates/modeloSistema.xhtml"
+>
+
+<ui:define name="menu">
+<ui:include src="/includes/menu.xhtml" />
+</ui:define>
+
+<ui:define name="conteudo">
+
+<h:form id="frmclientes">
+
+<p:dataTable id="tbclientes" 
+widgetVar="tabelaClientes"
+emptyMessage="Nenhum registro encontrado!"
+value="#{MBClientes.itens}"
+var="item"
+filteredValue="#{MBClientes.itensFiltrados}"
+paginator="true"
+rows="7"
+>
+
+<f:facet name="header">Lista de Clientes</f:facet>
+
+    <p:column headerText="Código" sortBy="#{item.codigo}" filterBy="#{item.codigo}">
+      <h:outputText value="#{item.codigo}" />
+    </p:column>
+ 
+    <p:column headerText="Nome" sortBy="#{item.nome}" filterBy="#{item.nome}">
+        <h:outputText value="#{item.nome}" />
+    </p:column>
+    
+    <p:column headerText="Telefone" sortBy="#{item.telefone}" filterBy="#{item.telefone}">
+        <h:outputText value="#{item.telefone}" />
+    </p:column>
+    
+    <p:column headerText="Email" sortBy="#{item.email}" filterBy="#{item.email}">
+        <h:outputText value="#{item.email}" />
+    </p:column>
+    
+    <p:column headerText="Cidade" sortBy="#{item.cidade}" filterBy="#{item.cidade}">
+        <h:outputText value="#{item.cidade}" />
+    </p:column>
+    
+    <p:column headerText="Opções">
+        <p:commandButton icon="ui-icon-trash"   
+   oncomplete="PF('dlgciExcluir').show();" update=":frmciExcluir:pnforExcluir" >
+    <f:setPropertyActionListener value="#{item}" target="#{MBClientes.clientes}"></f:setPropertyActionListener>
+    </p:commandButton>
+    
+      <p:commandButton icon="ui-icon-pencil"  
+   oncomplete="PF('dlgciEditar').show();" update=":frmciEditar:pnciEditar" >
+    <f:setPropertyActionListener value="#{item}" target="#{MBClientes.clientes}"></f:setPropertyActionListener>
+    </p:commandButton>
+    </p:column>
+    
+    
+ 
+   <f:facet name="footer">
+   <p:commandButton value="Novo" actionListener="#{MBClientes.prepararNovo}" 
+   oncomplete="PF('dlgciNovo').show();" update=":frmciNovo:pnciNovo" /></f:facet>
+   
+</p:dataTable>
+</h:form>
+
+<p:dialog widgetVar="dlgciNovo" closable="false" draggable="false" resizable="false"
+header="Cadastar Clientes"
+modal="true"
+appendTo="@(body)"
+>
+<h:form id="frmciNovo">
+<h:panelGrid id="pnciNovo" columns="2">
+<p:outputLabel value="Nome:" for="txtDescNovo" />
+<h:inputText size="30" maxlength="50" id="txtDescNovo"
+value="#{MBClientes.clientes.nome}" required="true"
+requiredMessage="O campo descrição é obrigatório." />
+</h:panelGrid>
+<h:panelGrid id="pnciNovo" columns="2">
+<p:outputLabel value="Telefone:" for="txtDescNovo" />
+<h:inputText size="30" maxlength="50" id="txtDescNovo"
+value="#{MBClientes.clientes.telefone}" required="true"
+requiredMessage="O campo descrição é obrigatório." />
+</h:panelGrid>
+<h:panelGrid id="pnciNovo" columns="2">
+<p:outputLabel value="Email:" for="txtDescNovo" />
+<h:inputText size="30" maxlength="50" id="txtDescNovo"
+value="#{MBClientes.clientes.email}" required="true"
+requiredMessage="O campo descrição é obrigatório." />
+</h:panelGrid>
+<h:panelGrid id="pnciNovo" columns="2">
+<p:outputLabel value="Cidade:" for="txtDescNovo" />
+<h:inputText size="30" maxlength="50" id="txtDescNovo"
+value="#{MBClientes.clientes.cidade}" required="true"
+requiredMessage="O campo descrição é obrigatório." />
+</h:panelGrid>
+<h:panelGrid columns="2">
+<p:commandButton value="Gravar" actionListener="#{MBClientes.novo}" 
+oncomplete="verificar(xhr, status, args, 'dlgciNovo', 'tbclientes');" 
+update=":frmclientes:tbclientes :msgGlobal"/>
+<p:commandButton value="Cancelar" 
+process="@this"
+onclick="PF('dlgciNovo').hide();" />
+</h:panelGrid>
+</h:form>
+</p:dialog>
+
+<p:dialog widgetVar="dlgciExcluir" closable="false" draggable="false" resizable="false"
+header="Excluir Clientes"
+modal="true"
+appendTo="@(body)">
+
+<h:form id="frmciExcluir">
+<h:panelGrid id="pnciExcluir" columns="2">
+<h:outputText value="Código" />
+<h:outputText value="#{MBClientes.clientes.codigo}" />
+
+<h:outputText value="Nome" />
+<h:outputText value="#{MBClientes.clientes.nome}" />
+</h:panelGrid>
+
+<h:panelGrid columns="2">
+<p:commandButton value="Excluir" actionListener="#{MBClientes.excluir}" 
+oncomplete="PF('dlgciExcluir').hide(); PF('tabelaClientes').clearFilters(); " 
+update=":frmclientes:tbclientes :msgGlobal"/>
+<p:commandButton value="Cancelar" onclick="PF('dlgciExcluir').hide();" />
+</h:panelGrid>
+
+</h:form>
+
+</p:dialog>
+
+
+
+<p:dialog widgetVar="dlgciEditar" closable="false" draggable="false" resizable="false"
+header="Editar Clientes"
+modal="true"
+appendTo="@(body)">
+
+<h:form id="frmciEditar">
+<h:panelGrid id="pnciEditar" columns="2">
+
+<h:outputText value="Código" />
+<h:outputText value="#{MBClientes.clientes.codigo}" />
+
+<h:outputText value="Nome" for="txtEdtfor" />
+<h:inputText value="#{MBClientes.clientes.nome}" 
+ id="txtEdtfor"
+required="true"
+requiredMessage="O campo descrição é obrigatório." />
+
+<h:outputText value="Telefone" for="txtEdtfor" />
+<h:inputText value="#{MBClientes.clientes.telefone}" 
+ id="txtEdtfor"
+required="true"
+requiredMessage="O campo descrição é obrigatório." />
+
+
+<h:outputText value="Email" for="txtEdtfor" />
+<h:inputText value="#{MBClientes.clientes.email}" 
+ id="txtEdtfor"
+required="true"
+requiredMessage="O campo descrição é obrigatório." />
+
+
+<h:outputText value="Cidade" for="txtEdtfor" />
+<h:inputText value="#{MBClientes.clientes.cidade}" 
+ id="txtEdtfor"
+required="true"
+requiredMessage="O campo descrição é obrigatório." />
+</h:panelGrid>
+</h:form>
+<h:panelGrid columns="2">
+<p:commandButton value="Editar" actionListener="#{MBClientes.editar}" 
+oncomplete="verificar(xhr, status, args, 'dlgciEditar', 'tbclientes'); " 
+update=":frmclientes:tbclientes :msgGlobal"/>
+<p:commandButton value="Cancelar"
+process="@this"
+ onclick="PF('dlgciEditar').hide();" />
+</h:panelGrid>
+
+</h:form>
+
+</p:dialog>
+
+</ui:define>
+
+</ui:composition>

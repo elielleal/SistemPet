@@ -1,0 +1,27 @@
+package br.com.pet.DAO;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+
+import br.com.pet.domain.Produtos;
+import br.com.pet.factory.ConexaoFactory;
+
+public class ProdutoDAO {
+	public void save(Produtos p) throws SQLException{
+		StringBuilder sql = new StringBuilder();
+		sql.append("INSERT INTO produtos ");
+		sql.append("(descricao, quantidade, preco, fornecedores_codigo) ");
+		sql.append("VALUES (?,?,?,?)");
+		
+		Connection conexao = ConexaoFactory.conectar();
+		
+		PreparedStatement comando = conexao.prepareStatement(sql.toString());
+		comando.setString(1, p.getDescricao());
+		comando.setInt(2, p.getQuantidade());
+		comando.setDouble(3, p.getPreco());
+		comando.setInt(4, p.getFornecedores().getCodigo());
+		comando.executeUpdate();
+	}
+}

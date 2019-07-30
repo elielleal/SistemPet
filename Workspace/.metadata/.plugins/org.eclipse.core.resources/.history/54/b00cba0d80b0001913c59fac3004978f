@@ -1,0 +1,14 @@
+package br.com.pet.domain;
+
+public class Fornecedores {
+	private int codigo;
+	private String nomeDono;
+	private String telefone;
+	private String email;
+	private String horarioAgend;
+	private Clientes clientes;
+	
+	
+	
+	
+}

@@ -1,0 +1,25 @@
+package br.com.pet.DAO;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import java.sql.PreparedStatement;
+
+import br.com.pet.domain.Fornecedores;
+import br.com.pet.factory.ConexaoFactory;
+
+public class FornecedoresDAO {
+ 
+	public void save(Fornecedores f) throws SQLException{
+		StringBuilder sql = new StringBuilder();
+		sql.append("INSERT INTO fornecedores ");
+		sql.append("(descricao)");
+		sql.append("VALUES (?)");
+		
+		Connection conexao = ConexaoFactory.conectar();
+		
+		PreparedStatement comando = conexao.prepareStatement(sql.toString());
+		comando.setString(1, f.getDescricao());
+		comando.execute();
+	}
+}

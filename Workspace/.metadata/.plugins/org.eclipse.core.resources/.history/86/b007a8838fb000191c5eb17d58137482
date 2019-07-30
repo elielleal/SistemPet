@@ -1,0 +1,60 @@
+package br.com.pet.DAO;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import java.sql.PreparedStatement;
+
+import br.com.pet.domain.Fornecedores;
+import br.com.pet.factory.ConexaoFactory;
+
+public class FornecedoresDAO {
+ 
+	public void save(Fornecedores f) throws SQLException{
+		StringBuilder sql = new StringBuilder();
+		sql.append("INSERT INTO fornecedores ");
+		sql.append("(descricao) ");
+		sql.append("VALUES (?)");
+		
+		Connection conexao = ConexaoFactory.conectar();
+		
+		PreparedStatement comando = conexao.prepareStatement(sql.toString());
+		comando.setString(1, f.getDescricao());
+		comando.executeUpdate();
+	}
+	
+	public void delete (Fornecedores f) throws SQLException{
+		StringBuilder sql = new StringBuilder();
+		sql.append("DELETE FROM fornecedores ");
+		sql.append("WHERE codigo = ?");
+		
+		Connection conexao = ConexaoFactory.conectar();
+		
+		PreparedStatement comando = conexao.prepareStatement(sql.toString());
+		comando.setInt(1, f.getCodigo());
+		comando.executeUpdate();
+	} 
+	
+	public static void main(String[] args) {
+		/*Fornecedores f1 = new Fornecedores();
+		f1.setDescricao("Descrição 1");
+		
+		Fornecedores f2 = new Fornecedores();
+		f2.setDescricao("Descrição 2");
+		
+		FornecedoresDAO fao = new FornecedoresDAO();
+		try {
+			fao.save(f1);
+			fao.save(f2);
+			System.out.println("Salvo com Sucesso!!");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("Ocorreu um Erro!!");
+		}*/
+		
+		Fornecedores f1 = new Fornecedores();
+		f1.setCodigo(2);
+		
+	}
+}

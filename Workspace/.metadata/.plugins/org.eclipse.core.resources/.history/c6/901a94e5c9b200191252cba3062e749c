@@ -1,0 +1,5 @@
+package br.com.pet.bean;
+
+public class ClientesBean {
+
+}

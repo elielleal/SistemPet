@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/templates/modeloSistema.xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="menu">
+		<ui:include src="/includes/menu.xhtml" />
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="frmAgendar">
+			<p:dataTable id="tbAgendar" widgetVar="tabelaAgendar"
+				emptyMessage="Nenhum registro encontrado!"
+				value="#{MBAgendar.itens}" var="item"
+				filteredValue="#{MBAgendar.itensFiltrados}" paginator="true"
+				rows="7">
+
+				<f:facet name="header">Lista de Agendas</f:facet>
+
+				<p:column headerText="Código" sortBy="#{item.codigo}"
+					filterBy="#{item.codigo}">
+					<h:outputText value="#{item.codigo}" />
+				</p:column>
+
+				<p:column headerText="Nome Dono" sortBy="#{item.nomeDono}"
+					filterBy="#{item.nomeDono}">
+					<h:outputText value="#{item.nomeDono}" />
+				</p:column>
+
+				<p:column headerText="Telefone" sortBy="#{item.telefone}"
+					filterBy="#{item.telefone}">
+					<h:outputText value="#{item.telefone}" />
+				</p:column>
+				
+					<p:column headerText="Email" sortBy="#{item.email}"
+					filterBy="#{item.email}">
+					<h:outputText value="#{item.email}" />
+				</p:column>
+
+				<p:column headerText="Horario Agendar" sortBy="#{item.horarioAgend}"
+					filterBy="#{item.horarioAgend}">
+					<h:outputText value="#{item.horarioAgend}" />
+				</p:column>
+
+				<p:column headerText="Clientes"
+					sortBy="#{item.clientes.nome}"
+					filterBy="#{item.clientes.nome}">
+					<h:outputText value="#{item.clientes.nome}" />
+				</p:column>
+
+				<p:column headerText="Opções">
+					<p:commandButton icon="ui-icon-trash"
+						oncomplete="PF('dlgagExcluir').show();"
+						update=":frmproExcluir:pnagExcluir">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBAgendar.agendar}"></f:setPropertyActionListener>
+
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-pencil"
+						oncomplete="PF('dlgagEditar').show();"
+						update=":frmagEditar:pnagEditar">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBAgendar.agendar}"></f:setPropertyActionListener>
+
+					</p:commandButton>
+				</p:column>
+
+				<f:facet name="footer">
+					<p:commandButton value="Novo" oncomplete="PF('dlgagNovo').show();"
+						actionListener="#{MBAgendar.prepararNovo}"
+						update=":frmagNovo:pnagNovo :msgGlobal" />
+				</f:facet>
+			</p:dataTable>
+		</h:form>
+
+		<p:dialog widgetVar="dlgagNovo" closable="false" draggable="false"
+			resizable="false" header="Cadastrar Agendas" modal="true"
+			appendTo="@(body)">
+			<h:form id="frmagNovo">
+				<h:panelGrid id="pnagNovo" columns="2">
+
+					<p:outputLabel value="Nome:" />
+					<p:inputText size="30" maxlength="50"
+						value="#{MBAgendar.agendar.nomeDono}" />
+
+					<p:outputLabel value="Telefone:" />
+					<p:inputText size="15" maxlength="50"
+						value="#{MBAgendar.agendar.telefone}" />
+
+					<p:outputLabel value="Email:" />
+					<p:inputText size="15" maxlength="50"
+						value="#{MBAgendar.agendar.email}" />
+						
+					<p:outputLabel value="Horario Agenda:" />
+					<p:inputText size="15" maxlength="50"
+						value="#{MBAgendar.agendar.horarioAgend}" />
+
+					<p:outputLabel value="Clientes:" />
+					<p:selectOneMenu value="#{MBAgendar.agendar.clientes.codigo}"
+						filter="true">
+						<f:selectItem itemValue="" itemLabel="Selecione um Cliente" />
+						<f:selectItems value="#{MBAgendar.comboClientes}" var="item"
+							itemValue="#{item.codigo}" itemLabel="#{item.nome}">
+						</f:selectItems>
+					</p:selectOneMenu>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<p:commandButton value="Salvar" actionListener="#{MBAgendar.novo}"
+						oncomplete="PF('dlgagNovo').hide(); PF('tabelaAgendar').clearFilters();"
+						update=":frmAgendar:tbAgendar :msgGlobal" />
+					<p:commandButton value="Cancelar"
+						onclick="PF('dlgagNovo').hide();" />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog widgetVar="dlgagExcluir" closable="false" draggable="false"
+			resizable="false" header="Excluir Agendar" modal="true"
+			appendTo="@(body)">
+
+			<h:form id="frmagExcluir">
+				<h:panelGrid id="pnagExcluir" columnClasses="2">
+					<h:outputText value="Código" />
+					<h:outputText value="#{MBAgendar.agendar.codigo}" />
+
+					<h:outputText value="Nome" />
+					<h:outputText value="#{MBAgendar.agendar.nomeDono}" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<p:commandButton value="Excluir"
+						actionListener="#{MBAgendar.excluir}"
+						oncomplete="PF('dlgagExcluir').hide(); PF('tabelaAgendar').clearFilters();"
+						update=":frmPAgendar:tbAgendar :msgGlobal" />
+					<p:commandButton value="Cancelar"
+						onclick="PF('dlgagExcluir').hide();" />
+				</h:panelGrid>
+			</h:form>
+
+		</p:dialog>
+
+
+		<p:dialog widgetVar="dlgagEditar" closable="false" draggable="false"
+			resizable="false" header="Editar Agenda" modal="true"
+			appendTo="@(body)">
+
+			<h:form id="frmagEditar">
+				<h:panelGrid id="pnagEditar" columns="2">
+					<h:outputText value="Código" />
+					<h:outputText value="#{MBAgendar.agendar.codigo}" />
+
+					<h:outputText value="Nome" />
+					<h:inputText value="#{MBAgendar.agendar.nomeDono}"
+						required="true" requiredMessage="O campo descrição é obrigatório." />
+
+					<h:outputText value="Telefone" />
+					<h:inputText value="#{MBAgendar.agendar.telefone}" required="true"
+						requiredMessage="O campo Preço é obrigatório." />
+
+					<h:outputText value="Email" />
+					<h:inputText value="#{MBAgendar.agendar.email}"
+						required="true"
+						requiredMessage="O campo quantidade é obrigatório." />
+						
+					<h:outputText value="Horario Agenda" />
+					<h:inputText value="#{MBAgendar.agendar.horarioAgend}"
+						required="true"
+						requiredMessage="O campo quantidade é obrigatório." />
+
+					<h:outputText value="Cliente" />
+					<p:selectOneMenu value="#{MBAgendar.agendar.clientes.codigo}"
+						filter="true" required="true"
+						requiredMessage="O campo Fornecedor é obrigatório.">
+
+
+						<f:selectItems value="#{MBAgendar.comboClientes}" var="item"
+							itemValue="#{item.codigo}" itemLabel="#{item.nome}">
+
+						</f:selectItems>
+					</p:selectOneMenu>
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<p:commandButton value="Editar"
+						actionListener="#{MBAgendar.editar}"
+						oncomplete="verificar(xhr, status, args, 'dlgagEditar', 'tbAgendar'); "
+						update=":frmAgendar:tbAgendar :msgGlobal" />
+					<p:commandButton value="Cancelar" process="@this"
+						onclick="PF('dlgagEditar').hide();" />
+				</h:panelGrid>
+
+			</h:form>
+
+		</p:dialog>
+	</ui:define>
+</ui:composition>

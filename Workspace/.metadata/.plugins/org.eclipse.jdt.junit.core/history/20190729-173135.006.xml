@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="ProdutoDAOTest" project="Pet" tests="2" started="2" failures="0" errors="0" ignored="1">
+  <testsuite name="br.com.pet.test.ProdutoDAOTest" time="0.434">
+    <testcase name="listar" classname="br.com.pet.test.ProdutoDAOTest" time="0.433"/>
+    <testcase name="salvar" classname="br.com.pet.test.ProdutoDAOTest" time="0.001" ignored="true"/>
+  </testsuite>
+</testrun>
